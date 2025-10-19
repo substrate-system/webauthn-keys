@@ -1,10 +1,11 @@
 # webauthn keys
-![tests](https://github.com/bicycle-codes/webauthn-keys/actions/workflows/nodejs.yml/badge.svg)
-[![types](https://img.shields.io/npm/types/@bicycle-codes/webauthn-keys?style=flat-square)](README.md)
+![tests](https://github.com/substrate-system/webauthn-keys/actions/workflows/nodejs.yml/badge.svg)
+[![types](https://img.shields.io/npm/types/@substrate-system/webauthn-keys?style=flat-square)](README.md)
 [![module](https://img.shields.io/badge/module-ESM-blue?style=flat-square)](README.md)
 [![semantic versioning](https://img.shields.io/badge/semver-2.0.0-blue?logo=semver&style=flat-square)](https://semver.org/)
-[![install size](https://flat.badgen.net/packagephobia/install/@bicycle-codes/webauthn-keys?cache-control=no-cache)](https://packagephobia.com/result?p=@bicycle-codes/webauthn-keys)
-[![license](https://img.shields.io/badge/license-Polyform_Non_Commercial-26bc71?style=flat-square)](LICENSE)
+[![install size](https://flat.badgen.net/packagephobia/install/@substrate-system/webauthn-keys?cache-control=no-cache)](https://packagephobia.com/result?p=@substrate-system/webauthn-keys)
+[![GZip size](https://flat.badgen.net/bundlephobia/minzip/@substrate-system/webauthn-keys)](https://bundlephobia.com/package/@substrate-system/webauthn-keys)
+[![license](https://img.shields.io/badge/license-Big_Time-blue?style=flat-square)](LICENSE)
 
 
 A simple way to use crypto keys with [webauthn](https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API)
@@ -12,7 +13,7 @@ A simple way to use crypto keys with [webauthn](https://developer.mozilla.org/en
 
 Save an ECC keypair, then access it iff the user authenticates via `webauthn`.
 
-[See a live demo](https://bicycle-codes.github.io/webauthn-keys/)
+[See a live demo](https://substrate-system.github.io/webauthn-keys/)
 
 <details><summary><h2>Contents</h2></summary>
 
@@ -58,7 +59,7 @@ Save an ECC keypair, then access it iff the user authenticates via `webauthn`.
 ## install
 
 ```sh
-npm i -S @bicycle-codes/webauthn-keys
+npm i -S @substrate-system/webauthn-keys
 ```
 
 ## how it works
@@ -88,7 +89,7 @@ successful authentication with the `webauthn` API.
 Create a new keypair.
 
 ```js
-import { create } from '@bicycle-codes/webauthn-keys'
+import { create } from '@substrate-system/webauthn-keys'
 
 const id = await create({  // create a new user
     username: 'alice'
@@ -98,7 +99,7 @@ const id = await create({  // create a new user
 Save the new user to `indexedDB`
 
 ```js
-import { pushLocalIdentity } from '@bicycle-codes/webauthn-keys'
+import { pushLocalIdentity } from '@substrate-system/webauthn-keys'
 
 await pushLocalIdentity(id.localID, id.record)
 ```
@@ -106,7 +107,7 @@ await pushLocalIdentity(id.localID, id.record)
 Login with this user
 
 ```js
-import { auth } from '@bicycle-codes/webauthn-keys'
+import { auth } from '@substrate-system/webauthn-keys'
 
 // ... sometime in the future, login again ...
 
@@ -133,7 +134,7 @@ import {
     localIdentities,
     storeLocalIdentities,
     pushLocalIdentity,
-} from '@bicycle-codes/webauthn-keys'
+} from '@substrate-system/webauthn-keys'
 
 // and types
 import type {
@@ -142,7 +143,7 @@ import type {
     LockKey,
     JSONValue,
     AuthResponse
-} from '@bicycle-codes/webauthn-keys'
+} from '@substrate-system/webauthn-keys'
 ```
 
 ### pre-built JS
@@ -151,7 +152,7 @@ accessible to your web server, then link to them in HTML.
 
 #### copy
 ```sh
-cp ./node_modules/@bicycle-codes/package/dist/index.min.js ./public/webauthn-keys.min.js
+cp ./node_modules/@substrate-system/webauthn-keys/dist/index.min.js ./public/webauthn-keys.min.js
 ```
 
 #### HTML
@@ -170,7 +171,7 @@ Link to the file you copied.
 Create a new keypair, and keep it secret with the `webatuhn` API.
 
 ```ts
-import { create } from '@bicycle-codes/webauthn-keys'
+import { create } from '@substrate-system/webauthn-keys'
 
 const id = await create({
     username: 'alice',  // unique within relying party (this device)
@@ -184,7 +185,7 @@ const id = await create({
 Save the public data of the new ID to `indexedDB`:
 
 ```ts
-import { pushLocalIdentity } from '@bicycle-codes/webauthn-keys'
+import { pushLocalIdentity } from '@substrate-system/webauthn-keys'
 
 // save to indexedDB
 await pushLocalIdentity(id.localID, id.record)
@@ -195,7 +196,7 @@ await pushLocalIdentity(id.localID, id.record)
 Login again, and get the same keypair in memory. This will prompt for biometric authentication.
 
 ```ts
-import { auth, getKeys } from '@bicycle-codes/webauthn-keys'
+import { auth, getKeys } from '@substrate-system/webauthn-keys'
 
 const authResult = await auth()
 const keys = getKeys(authResult)
@@ -252,7 +253,7 @@ async function create (
 import {
     create,
     pushLocalIdentity
-} from '@bicycle-codes/webauthn-keys'
+} from '@substrate-system/webauthn-keys'
 
 const { record, keys, localID } = await create(undefined, {
     username: 'alice',
@@ -280,7 +281,7 @@ async function auth (
 #### `auth` example
 
 ```ts
-import { auth, getKeys } from '@bicycle-codes/webauthn'
+import { auth, getKeys } from '@substrate-system/webauthn'
 
 const authResult = await auth()
 const keys = getKeys(authResult)
@@ -315,7 +316,7 @@ function getKeys (opts:(PublicKeyCredential & {
 #### `getKeys` example
 
 ```ts
-import { getKeys, auth } from '@bicycle-codes/webauthn-keys'
+import { getKeys, auth } from '@substrate-system/webauthn-keys'
 
 // authenticate
 const authData = await auth()
@@ -333,7 +334,7 @@ function stringify (keys:LockKey):string
 
 #### `stringify` example
 ```ts
-import { stringify } from '@bicycle-codes/webauthn-keys'
+import { stringify } from '@substrate-system/webauthn-keys'
 
 const keyString = stringify(myKeys)
 // => 'welOX9O96R6WH0S8cqqwMlPAJ3VwMgAZEnc1wa1MN70='
@@ -348,7 +349,7 @@ export async function signData (data:string|Uint8Array, key:LockKey, opts?:{
 
 #### `signData` example
 ```ts
-import { signData, deriveLockKey } from '@bicycle-codes/webauthn-keys'
+import { signData, deriveLockKey } from '@substrate-system/webauthn-keys'
 
 // create a new keypair
 const key = await deriveLockKey()
@@ -370,7 +371,7 @@ export async function verify (
 
 #### `verify` example
 ```ts
-import { verify } from '@bicycle-codes/webauthn-keys'
+import { verify } from '@substrate-system/webauthn-keys'
 
 const isOk = await verify('hello', 'dxKmG3oTEN2i23N9d...', {
     publicKey: '...'  // Uint8Array or string
@@ -393,7 +394,7 @@ export function encrypt (
 
 #### `encrypt` example
 ```js
-import { encrypt } from '@bicycle-codes/webauthn-keys'
+import { encrypt } from '@substrate-system/webauthn-keys'
 
 const encrypted = encrypt('hello encryption', myKeys)
 // => XcxWEwijaHq2u7aui6BBYGjIrjVTkLIS5...
@@ -415,7 +416,7 @@ function decrypt (
 #### `decrypt` example
 
 ```js
-import { decrypt } from '@bicycle-codes/webauthn-keys'
+import { decrypt } from '@substrate-system/webauthn-keys'
 
 const decrypted = decrypt('XcxWEwijaHq2u7aui6B...', myKeys, {
     parseJSON: false
@@ -434,7 +435,7 @@ async function localIdentities ():Promise<Record<string, Identity>>
 #### `localIdentities` example
 
 ```js
-import { localIdentites } from '@bicycle-codes/webauthn-keys'
+import { localIdentites } from '@substrate-system/webauthn-keys'
 
 const ids = await localIdentities()
 ```
