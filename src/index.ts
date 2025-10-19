@@ -20,7 +20,7 @@ import {
     verifySignatureSodium,
     computeVerificationData,
 } from './util'
-import { ASN1Parser as ASN1 } from '@bicycle-codes/asn1'
+import { ASN1Parser as ASN1 } from '@substrate-system/asn1'
 import type {
     Identity,
     RegistrationResult,

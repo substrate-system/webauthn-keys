@@ -1,6 +1,6 @@
 import { del, get, set } from 'idb-keyval'
 import libsodium from 'libsodium-wrappers'
-import { ASN1, type ASN1Data } from '@bicycle-codes/asn1'
+import { ASN1, type ASN1Data } from '@substrate-system/asn1'
 import { PUBLIC_KEY_ALGORITHMS } from './constants'
 import type { PassKeyPublicKey, Identity, JSONValue } from './types'
 // import Debug from '@substrate-system/debug'
