@@ -30,8 +30,8 @@ import type {
 } from './types'
 import { decode as cborDecode } from 'cborg'
 import { PUBLIC_KEY_ALGORITHMS } from './constants'
-import { createDebug } from '@substrate-system/debug'
-const debug = createDebug()
+import Debug from '@substrate-system/debug'
+const debug = Debug(import.meta.env?.DEV)
 
 export {
     localIdentities as listLocalIdentities,
@@ -338,7 +338,7 @@ export async function auth (
         relyingPartyID:string
     }> = {},
     { verify }:{ verify?:boolean } = {}
-):Promise<{ request, response }> {
+):Promise<{ request:any, response:any }> {
     const ids = await localIdentities()
     if (!ids) throw new Error('not ids')
 
@@ -565,11 +565,11 @@ export async function signData (
     return outputFormat === 'base64' ? toBase64String(sig) : sig
 }
 
-export function encrypt (data:JSONValue, lockKey):string
-export function encrypt (data:JSONValue, lockKey, { outputFormat }:{
+export function encrypt (data:JSONValue, lockKey:LockKey):string
+export function encrypt (data:JSONValue, lockKey:LockKey, { outputFormat }:{
     outputFormat:'base64'
 }):string
-export function encrypt (data:JSONValue, lockKey, { outputFormat }:{
+export function encrypt (data:JSONValue, lockKey:LockKey, { outputFormat }:{
     outputFormat:'raw'
 }):Uint8Array
 export function encrypt (
@@ -631,7 +631,7 @@ export function authDefaults (
             allowCredentials,
             challenge: keyOpts.challenge ?
                 toUint8Array(keyOpts.challenge) :
-                sodium.randombytes_buf(20),
+                sodium.randombytes_buf(20) as Uint8Array<ArrayBuffer>,
             ...keyOpts,
         },
 
@@ -641,11 +641,11 @@ export function authDefaults (
     return defaults
 }
 
-function toUint8Array (bufferSource:BufferSource):Uint8Array {
+function toUint8Array (bufferSource:BufferSource):Uint8Array<ArrayBuffer> {
     if (bufferSource instanceof ArrayBuffer) {
         return new Uint8Array(bufferSource)
     } else if (bufferSource instanceof Uint8Array) {
-        return bufferSource
+        return bufferSource as Uint8Array<ArrayBuffer>
     } else if (bufferSource instanceof DataView) {
         return new Uint8Array(
             bufferSource.buffer,
@@ -669,7 +669,7 @@ async function verifyAuthResponse (
             clientDataJSON: clientDataRaw,
             authenticatorData: authDataRaw,
         },
-    }:Partial<{ signature:ArrayBuffer, raw }> = {},
+    }:Partial<{ signature:ArrayBuffer, raw:any }> = {},
     {
         // publicKey
         algoCOSE: publicKeyAlgoCOSE,
@@ -707,7 +707,6 @@ async function verifyAuthResponse (
                         verificationSig,
                         verificationData
                     ) :
-
                     (
                         // ECDSA (P-256)?
                         isPublicKeyAlgorithm('ES256', publicKeyAlgoCOSE) ||
@@ -743,7 +742,7 @@ async function verifyAuthResponse (
 function parseSignature (
     algoCOSE:COSEAlgorithmIdentifier,
     signature:ArrayBuffer
-):Uint8Array {
+):Uint8Array<ArrayBuffer> {
     if (isPublicKeyAlgorithm('ES256', algoCOSE)) {
         // this algorithm's signature comes back ASN.1 encoded, per spec:
         //   https://www.w3.org/TR/webauthn-2/#sctn-signature-attestation-types
@@ -758,7 +757,7 @@ function parseSignature (
     return new Uint8Array(signature)
 }
 
-function isPublicKeyAlgorithm (algoName, COSEID) {
+function isPublicKeyAlgorithm (algoName:string, COSEID:number) {
     return (
         publicKeyAlgorithmsLookup[algoName] === publicKeyAlgorithmsLookup[COSEID]
     )
@@ -775,12 +774,12 @@ type RegOpts = {
     relyingPartyID:string;
     relyingPartyName:string;
     attestation:AttestationConveyancePreference;
-    challenge:Uint8Array;
-    excludeCredentials:{ type, id }[];
+    challenge:Uint8Array<ArrayBuffer>;
+    excludeCredentials:{ type:'public-key', id:BufferSource }[];
     user:Partial<{
         name:string;
         displayName:string;
-        id:Uint8Array;
+        id:Uint8Array<ArrayBuffer>;
     }>;
     publicKeyCredentialParams:{ type:'public-key', alg:COSEAlgorithmIdentifier }[];
     signal:AbortSignal;
@@ -799,14 +798,14 @@ function regDefaults ({
     relyingPartyID = document.location.hostname,
     relyingPartyName = 'wacl',
     attestation = 'none' as AttestationConveyancePreference,
-    challenge = sodium.randombytes_buf(20),
+    challenge = sodium.randombytes_buf(20) as Uint8Array<ArrayBuffer>,
     excludeCredentials = [
         // { type: "public-key", id: ..., }
     ],
     user: {
         name: userName = 'wacl-user',
         displayName: userDisplayName = userName,
-        id: userID = sodium.randombytes_buf(5),
+        id: userID = sodium.randombytes_buf(5) as Uint8Array<ArrayBuffer>,
     } = {},
     publicKeyCredentialParams = (
         PUBLIC_KEY_ALGORITHMS.map(entry => ({
@@ -843,11 +842,8 @@ function regDefaults ({
             },
 
             challenge,
-
             excludeCredentials,
-
             pubKeyCredParams: publicKeyCredentialParams,
-
             ...otherPubKeyOptions,
         },
 

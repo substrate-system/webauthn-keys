@@ -42,8 +42,11 @@ export function normalizeCredentialsList (
     return []
 }
 
-export function fromBase64String (val:string):Uint8Array {
-    return sodium.from_base64(val, sodium.base64_variants.ORIGINAL)
+export function fromBase64String (val:string):Uint8Array<ArrayBuffer> {
+    return sodium.from_base64(
+        val,
+        sodium.base64_variants.ORIGINAL
+    ) as Uint8Array<ArrayBuffer>
 }
 
 export function toBase64String (val:Uint8Array):string {
@@ -522,7 +525,7 @@ function isPublicKeyAlgorithm (
 export async function computeVerificationData (
     authDataRaw:ArrayBuffer,
     clientDataRaw:ArrayBuffer
-):Promise<Uint8Array> {
+):Promise<Uint8Array<ArrayBuffer>> {
     const clientDataHash = await computeSHA256Hash(clientDataRaw)
     const data = new Uint8Array(
         authDataRaw.byteLength + clientDataHash.byteLength
