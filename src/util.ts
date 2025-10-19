@@ -122,7 +122,7 @@ function byteArrayTo32Int (byteArray:Uint8Array):number {
     return new DataView(byteArray.buffer).getInt32(0)
 }
 
-export async function checkRPID (rpIDHash, origRPID) {
+export async function checkRPID (rpIDHash:Uint8Array, origRPID:string) {
     const originHash = await computeSHA256Hash(fromUTF8String(origRPID))
 
     return (
@@ -158,7 +158,7 @@ export function getPublicKeyOpts (opts:Partial<{
             authenticatorAttachment: 'platform',
             userVerification: 'required',
         },
-        challenge: sodium.randombytes_buf(20),
+        challenge: new Uint8Array(sodium.randombytes_buf(20)),
         excludeCredentials: [
             // { type: "public-key", id: ..., }
         ],
@@ -170,7 +170,7 @@ export function getPublicKeyOpts (opts:Partial<{
         user: {
             name: username || 'anonymous',
             displayName: usernameDisplay || username || 'anonymous',
-            id: userID || sodium.randombytes_buf(5)
+            id: userID ? new Uint8Array(userID) : new Uint8Array(sodium.randombytes_buf(5))
         }
     }
 }
@@ -192,7 +192,7 @@ export function buildPasskeyEntry (passkey:{
     }
 }
 
-function computePasskeyEntryHash (passkeyEntry) {
+function computePasskeyEntryHash (passkeyEntry:any) {
     const { hash: _, ...passkey } = passkeyEntry
 
     /**
@@ -469,11 +469,12 @@ export async function verifySignatureSubtle (
         isPublicKeyAlgorithm('RS256', algoCOSE)
     ) {
         try {
+            const keyData = typeof publicKeySPKI === 'string' ?
+                fromBase64String(publicKeySPKI) :
+                publicKeySPKI
             const pubKeySubtle = await crypto.subtle.importKey(
                 'spki',  // Simple Public Key Infrastructure rfc2692
-                typeof publicKeySPKI === 'string' ?
-                    fromBase64String(publicKeySPKI) :
-                    publicKeySPKI,
+                new Uint8Array(keyData),
                 publicKeyAlgorithmsLookup[algoCOSE].cipherOpts,
                 false,  // extractable
                 ['verify']
@@ -532,7 +533,7 @@ export async function computeVerificationData (
     return data
 }
 
-async function computeSHA256Hash (val:ArrayBuffer) {
+async function computeSHA256Hash (val:ArrayBuffer|Uint8Array) {
     return new Uint8Array(
         await window.crypto.subtle.digest(
             'SHA-256',
