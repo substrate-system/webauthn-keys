@@ -1,6 +1,6 @@
 {
   "name": "@substrate-system/webauthn-keys",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Use ECC keys with the webauthn API",
   "type": "module",
   "directories": {
