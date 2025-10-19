@@ -1,5 +1,5 @@
 {
-  "name": "@bicycle-codes/webauthn-keys",
+  "name": "@substrate-system/webauthn-keys",
   "version": "0.1.3",
   "description": "Use ECC keys with the webauthn API",
   "type": "module",
@@ -38,7 +38,7 @@
     ]
   },
   "dependencies": {
-    "@bicycle-codes/asn1": "^0.0.7",
+    "@substrate-system/asn1": "^0.0.7",
     "cborg": "^4.2.3",
     "idb-keyval": "^6.2.1",
     "libsodium": "^0.7.15",
@@ -72,7 +72,7 @@
   "author": "nichoth <nichoth@nichoth.com> (https://nichoth.com)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bicycle-codes/webauthn-keys.git"
+    "url": "git+https://github.com/substrate-system/webauthn-keys.git"
   },
   "keywords": [
     "webauthn",
@@ -80,8 +80,8 @@
     "crypto"
   ],
   "bugs": {
-    "url": "https://github.com/bicycle-codes/webauthn-keys/issues"
+    "url": "https://github.com/substrate-system/webauthn-keys/issues"
   },
-  "homepage": "https://github.com/bicycle-codes/webauthn-keys",
+  "homepage": "https://github.com/substrate-system/webauthn-keys",
   "license": "SEE LICENSE IN LICENSE"
 }
