@@ -50,7 +50,7 @@
     "@substrate-system/css-normalize": "^0.0.13",
     "@substrate-system/debug": "^0.9.30",
     "@substrate-system/util": "^0.1.21",
-    "@types/libsodium-wrappers": "^0.7.14",
+    "@types/libsodium-wrappers": "^0.8.2",
     "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@typescript-eslint/parser": "^8.24.0",
     "auto-changelog": "^2.4.0",
