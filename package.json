@@ -65,7 +65,7 @@
     "postcss-nesting": "^14.0.0",
     "preact": "^10.25.4",
     "typedoc": "^0.28.1",
-    "typescript": "^6.0.2",
+    "typescript": "^7.0.2",
     "vite": "^8.0.0",
     "vitest": "^4.0.1"
   },
